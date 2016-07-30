@@ -1,4 +1,4 @@
-# bigInt
+# BigInt
 
 A c++ implementation of a big (very big) integers library.
 
