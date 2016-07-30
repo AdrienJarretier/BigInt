@@ -11,9 +11,15 @@ int main()
 //
 //  std::cout << foo << endl;
 
-    BigInt test(1);
+    BigInt test(18);
 
-    cout << test << endl;
+    BigInt testCopy(test);
+
+    BigInt testCopy2 = test;
+
+    cout << "test :      " << test << endl;
+    cout << "testCopy :  " << testCopy << endl;
+    cout << "testCopy2 : " << testCopy2 << endl;
 
     return 0;
 }

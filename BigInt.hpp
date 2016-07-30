@@ -9,13 +9,15 @@ class BigInt
 
 private:
 
-    std::bitset<1> currentValue;
+    std::bitset<8> currentValue;
 
 public:
 
     BigInt(long long val);
 
     friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
+
+    friend BigInt operator+(const BigInt& factor1, const BigInt& factor2);
 
 };
 
