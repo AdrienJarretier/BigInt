@@ -13,7 +13,9 @@ private:
 
 public:
 
-    BigInt(long long val);
+    BigInt(long long val=0);
+    BigInt(const BigInt& other);
+    BigInt& operator=(const BigInt& other);
 
     friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
 

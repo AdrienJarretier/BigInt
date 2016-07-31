@@ -6,20 +6,20 @@ using namespace std;
 
 int main()
 {
-
-//      std::bitset<40> foo (2512);
-//
-//  std::cout << foo << endl;
-
     BigInt test(18);
+    BigInt testAssignment(4);
 
-    BigInt testCopy(test);
+    BigInt testCopyConstructor(test);
 
-    BigInt testCopy2 = test;
+    BigInt testAssignementOperator(6);
 
-    cout << "test :      " << test << endl;
-    cout << "testCopy :  " << testCopy << endl;
-    cout << "testCopy2 : " << testCopy2 << endl;
+    testAssignementOperator = testAssignment;
+
+    cout << "test :                    " << test << endl;
+    cout << "testCopyConstructor :     " << testCopyConstructor << endl << endl;
+
+    cout << "testAssignment :          " << testAssignment << endl;
+    cout << "testAssignementOperator : " << testAssignementOperator << endl;
 
     return 0;
 }

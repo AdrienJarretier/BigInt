@@ -4,6 +4,16 @@ BigInt::BigInt(long long val)
 :currentValue(val)
 {}
 
+BigInt::BigInt(const BigInt& other)
+:currentValue(other.currentValue)
+{}
+
+BigInt& BigInt::operator=(const BigInt& other)
+{
+    currentValue = other.currentValue;
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 {
     os << bi.currentValue;
