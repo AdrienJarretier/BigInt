@@ -1,19 +1,19 @@
 #ifndef BIGINT_HPP
 #define BIGINT_HPP
 
-#include <bitset>
 #include <sstream>
+#include <vector>
 
 class BigInt
 {
 
 private:
 
-    std::bitset<sizeof(long long)*8> currentValue;
+    std::vector<bool> currentValue;
 
 public:
 
-    BigInt(long long val=0);
+    BigInt(std::string val="0");
     BigInt(const BigInt& other);
     BigInt& operator=(const BigInt& other);
 

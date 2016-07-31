@@ -6,14 +6,19 @@ using namespace std;
 
 int main()
 {
-    BigInt test(18);
-    BigInt testAssignment(4);
+    BigInt defaultTest;
+
+    BigInt test("10010");
+    BigInt testAssignment("100");
 
     BigInt testCopyConstructor(test);
 
-    BigInt testAssignementOperator(6);
+    BigInt testAssignementOperator("110");
 
     testAssignementOperator = testAssignment;
+
+
+    cout << "defaultTest :             " << defaultTest << endl << endl;
 
     cout << "test :                    " << test << endl;
     cout << "testCopyConstructor :     " << testCopyConstructor << endl << endl;
