@@ -9,7 +9,7 @@ class BigInt
 
 private:
 
-    std::bitset<8> currentValue;
+    std::bitset<sizeof(long long)*8> currentValue;
 
 public:
 

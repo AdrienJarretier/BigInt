@@ -22,6 +22,7 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 
 BigInt operator+(const BigInt& factor1, const BigInt& factor2)
 {
+    BigInt result;
 //    if(factor2.currentValue.size() > factor1.currentValue.size)
 //    {
 //
