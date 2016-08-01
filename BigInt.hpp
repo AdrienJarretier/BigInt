@@ -2,6 +2,7 @@
 #define BIGINT_HPP
 
 #include <sstream>
+#include <string>
 #include <vector>
 
 class BigInt
@@ -13,7 +14,13 @@ private:
 
 public:
 
+    /**
+     * Construct a BigInt from string representing the integer in binary
+     *
+     * @param val integer in base 2
+    **/
     BigInt(std::string val="0");
+
     BigInt(const BigInt& other);
     BigInt& operator=(const BigInt& other);
 

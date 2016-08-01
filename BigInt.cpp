@@ -1,9 +1,11 @@
 #include "BigInt.hpp"
 
 BigInt::BigInt(std::string val)
-:currentValue(val.size())
 {
-
+    for(auto c : val)
+    {
+        currentValue.push_back(c=='1');
+    }
 }
 
 BigInt::BigInt(const BigInt& other)
