@@ -30,20 +30,29 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
     BigInt result;
-//    // first test whi
-//    if(term1.currentValue.size() > term2.currentValue.size())
+
+//    for(unsigned int i=term1.currentValue.size(); i<term2.currentValue.size(); i++)
 //    {
-//        result = term1;
+//        term1.currentValue.insert(term1.currentValue.cbegin(),false);
 //    }
-//    else
-//    {
-//        result = term2;
-//    }
-//
-//    if(result.currentValue.test(0))
-//    {
-//        result.currentValue = std::bitset<result.currentValue.size()*2> currentValue;
-//    }
+
+    bool term1Biggest;
+
+    if(term1.currentValue.size() > term2.currentValue.size())
+    {
+        result = term1;
+        term1Biggest = true;
+    }
+    else
+    {
+        result = term2;
+        term1Biggest = false;
+    }
+
+    if(result.currentValue[0])
+    {
+        result.currentValue.insert(result.currentValue.cbegin(), 0);
+    }
 
     return result;
 }
