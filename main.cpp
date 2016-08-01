@@ -6,26 +6,19 @@ using namespace std;
 
 int main()
 {
-    BigInt defaultTest;
-    cout << "defaultTest :             " << defaultTest << endl << endl;
+    BigInt A("10010");
+    BigInt B("00101");
 
-    BigInt test("10010");
-    BigInt testAssignment("1111111111");
+    cout << "A :     " << A << endl;
+    cout << "B :     " << B << endl;
+    cout << "A + B = " << A + B << endl << endl;
 
-    BigInt testCopyConstructor(test);
+    BigInt C("001");
+    BigInt D("111");
 
-    BigInt testAssignementOperator("110");
-    cout << "testAssignementOperator : " << testAssignementOperator << endl << endl;
-
-    testAssignementOperator = testAssignment;
-
-
-
-    cout << "test :                    " << test << endl;
-    cout << "testCopyConstructor :     " << testCopyConstructor << endl << endl;
-
-    cout << "testAssignment :          " << testAssignment << endl;
-    cout << "testAssignementOperator : " << testAssignementOperator << endl;
+    cout << "C :     " << C << endl;
+    cout << "D :     " << D << endl;
+    cout << "C + D = " << C + D << endl;
 
     return 0;
 }
