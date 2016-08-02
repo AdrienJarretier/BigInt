@@ -31,12 +31,13 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
     unsigned int i=0;
 
-    while(i<operand1.currentValue.size() && operand1.currentValue[i]!=1)
+    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
     {
         i++;
     }
 
-    unsigned int op1DigitRank = operand1.currentValue.size()-1-i;
+    // if all digits are set to 0 then at this point rank = 0;
+    unsigned int op1DigitRank = operand1.currentValue.size()-i;
 
 
 
@@ -47,9 +48,30 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
         i++;
     }
 
-    unsigned int op2DigitRank = operand2.currentValue.size()-1-i;
+    // same as before here
+    unsigned int op2DigitRank = operand2.currentValue.size()-i;
 
+    // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
+    if(op1DigitRank != op2DigitRank)
+    {
+        return op1DigitRank < op2DigitRank;
+    }
+    else // if ranks are the seme, we have to compare each other digits one to one
+    {
+        i = op1DigitRank;
 
+        while(i>0)
+        {
+            // if at one rank digits are different, then we have a strict lesser than.
+            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
+            {
+                return !operand1.currentValue[i-1];
+            }
+        }
+    }
+
+    // at this point we have equality so we can return a false
+    return false;
 }
 
 bool operator>(const BigInt& operand1, const BigInt& operand2)
