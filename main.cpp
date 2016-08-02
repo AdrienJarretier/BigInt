@@ -20,10 +20,10 @@ int main()
     cout << "D :     " << D << endl;
     cout << "C + D = " << C + D << endl << endl;
 
-    cout << "A < B : (should be false) " << (A < B) << endl;
-    cout << "C < D : (should be true) " << (C < D) << endl;
-    cout << "A < D : (should be false) " << (A < D) << endl;
-    cout << "C < A : (should be true) " << (C < A) << endl << endl;
+    cout << "A > B : (should be 1) " << (A > B) << endl;
+    cout << "B > D : (should be 0) " << (B > D) << endl;
+    cout << "A > D : (should be 1) " << (A > D) << endl;
+    cout << "C > A : (should be 0) " << (C > A) << endl << endl;
 
     return 0;
 }
