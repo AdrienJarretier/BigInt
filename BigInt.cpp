@@ -29,6 +29,26 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 
 bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
+    unsigned int i=0;
+
+    while(i<operand1.currentValue.size() && operand1.currentValue[i]!=1)
+    {
+        i++;
+    }
+
+    unsigned int op1DigitRank = operand1.currentValue.size()-1-i;
+
+
+
+    i=0;
+
+    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
+    {
+        i++;
+    }
+
+    unsigned int op2DigitRank = operand2.currentValue.size()-1-i;
+
 
 }
 
