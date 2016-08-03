@@ -24,6 +24,15 @@ public:
     BigInt(const BigInt& other);
     BigInt& operator=(const BigInt& other);
 
+    /**
+     * Return a representation of the current held number in the requested base
+     *
+     * @param base The requested base
+     *
+     * @return the representation of the current value
+    **/
+    std::string toBase(unsigned short int base);
+
     friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
 
     friend bool operator<(const BigInt& operand1, const BigInt& operand2);
