@@ -131,12 +131,7 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
     BigInt result, termToAdd;
 
-//    for(unsigned int i=term1.currentValue.size(); i<term2.currentValue.size(); i++)
-//    {
-//        term1.currentValue.insert(term1.currentValue.cbegin(),false);
-//    }
-
-    if(term1.currentValue.size() > term2.currentValue.size())
+    if(term1 > term2)
     {
         result = term1;
         termToAdd = term2;
@@ -152,15 +147,21 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
         result.currentValue.insert(result.currentValue.begin(), 0);
     }
 
-    bool carry = false;
+    bool carry = false, nextCarry=false;
     std::vector<bool>::reverse_iterator resultRit = result.currentValue.rbegin();
     for(std::vector<bool>::reverse_iterator termToAddRit = termToAdd.currentValue.rbegin(); termToAddRit != termToAdd.currentValue.rend(); ++termToAddRit)
     {
-        carry = *resultRit && *termToAddRit;
-        *resultRit = *resultRit != *termToAddRit;
+        carry = nextCarry;
+        nextCarry = (*resultRit && *termToAddRit) || (carry && (*resultRit || *termToAddRit));
+        *resultRit = (!carry && (*resultRit != *termToAddRit)) || (carry && (*resultRit == *termToAddRit));
         ++resultRit;
     }
-    *resultRit = carry;
+    while(nextCarry)
+    {
+        nextCarry = *resultRit;
+        *resultRit = !*resultRit;
+        ++resultRit;
+    }
 
     return result;
 }
