@@ -37,9 +37,11 @@ std::string BigInt::toBase(unsigned short int base)
         {
             *p2rit = *p2rit * 2;
         }
-        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=std::prev(power2.rend())0; ++p2rit)
+        unsigned short int quotient = 0;
+        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=std::prev(power2.rend()); ++p2rit)
         {
-            *p2rit *= 2;
+            *p2rit = *p2rit + ;
+            quotient =
         }
     }
 }
