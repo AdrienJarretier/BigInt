@@ -18,6 +18,32 @@ BigInt& BigInt::operator=(const BigInt& other)
     return *this;
 }
 
+std::string BigInt::toBase(unsigned short int base)
+{
+    std::vector<unsigned short int> power2 = {1};
+
+    std::vector<unsigned short int> result = {0};
+
+    if(*currentValue.rbegin())
+    {
+        result[0]=1;
+    }
+
+    // we handle the least significant bit before the loop so we start the loop at rbegin + 1
+    for(std::vector<bool>::reverse_iterator rit=std::next(currentValue.rbegin()); rit!=currentValue.rend(); ++rit)
+    {
+        // multiply each element of power2 by 2 (using modulus to stay in the given base)
+        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=power2.rend(); ++p2rit)
+        {
+            *p2rit = *p2rit * 2;
+        }
+        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=std::prev(power2.rend())0; ++p2rit)
+        {
+            *p2rit *= 2;
+        }
+    }
+}
+
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 {
     for(auto dig : bi.currentValue)
