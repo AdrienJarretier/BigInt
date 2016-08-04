@@ -18,6 +18,12 @@ BigInt& BigInt::operator=(const BigInt& other)
     return *this;
 }
 
+BigInt& BigInt::operator+=(const BigInt& term)
+{
+    (*this) = (*this)+term;
+    return *this;
+}
+
 std::string BigInt::toBase(unsigned short int base)
 {
     std::vector<unsigned short int> power2 = {1};
@@ -242,3 +248,20 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
 
     return result;
 }
+
+BigInt operator*(const BigInt& factor1, const BigInt& factor2)
+{
+    BigInt f1(factor1), result;
+
+    for(std::vector<bool>::const_reverse_iterator rit = factor2.currentValue.rbegin(); rit != factor2.currentValue.rend(); ++rit)
+    {
+        if(*rit)
+        {
+            result += f1;
+        }
+        f1.currentValue.push_back(0);
+    }
+
+    return result;
+}
+

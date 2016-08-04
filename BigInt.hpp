@@ -23,6 +23,7 @@ public:
 
     BigInt(const BigInt& other);
     BigInt& operator=(const BigInt& other);
+    BigInt& operator+=(const BigInt& term);
 
     /**
      * Return a representation of the current held number in the requested base
@@ -38,6 +39,7 @@ public:
     friend bool operator<(const BigInt& operand1, const BigInt& operand2);
     friend bool operator>(const BigInt& operand1, const BigInt& operand2);
     friend BigInt operator+(const BigInt& term1, const BigInt& term2);
+    friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
 
 };
 
