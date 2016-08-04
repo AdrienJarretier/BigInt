@@ -9,21 +9,20 @@ int main()
     BigInt A("10010");
     BigInt B("00101");
 
-    cout << "A :     " << A << endl;
-    cout << "B :     " << B << endl;
-    cout << "A + B = " << A + B << endl << endl;
+    const unsigned short int BASE = 16;
 
-    BigInt C("001");
-    BigInt D("111");
+    cout << "base " << BASE << endl << endl;
 
-    cout << "C :     " << C << endl;
-    cout << "D :     " << D << endl;
-    cout << "C + D = " << C + D << endl << endl;
+    cout << "A :     " << A << " : " << A.toBase(BASE) << endl;
+    cout << "B :     " << B << " : " << B.toBase(BASE) << endl;
+    cout << "A + B = " << A + B << " : " << (A+B).toBase(BASE) << endl << endl;
 
-    cout << "A > B : (should be 1) " << (A > B) << endl;
-    cout << "B > D : (should be 0) " << (B > D) << endl;
-    cout << "A > D : (should be 1) " << (A > D) << endl;
-    cout << "C > A : (should be 0) " << (C > A) << endl << endl;
+    BigInt C("1010");
+    BigInt D("0101");
+
+    cout << "C :     " << C << " : " << C.toBase(BASE) << endl;
+    cout << "D :     " << D << " : " << D.toBase(BASE) << endl;
+    cout << "C + D = " << C + D << " : " << (C+D).toBase(BASE) << endl << endl;
 
     return 0;
 }

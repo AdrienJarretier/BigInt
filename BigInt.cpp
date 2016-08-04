@@ -33,17 +33,66 @@ std::string BigInt::toBase(unsigned short int base)
     for(std::vector<bool>::reverse_iterator rit=std::next(currentValue.rbegin()); rit!=currentValue.rend(); ++rit)
     {
         // multiply each element of power2 by 2 (using modulus to stay in the given base)
-        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=power2.rend(); ++p2rit)
+        for(std::vector<unsigned short int>::reverse_iterator p2rit=power2.rbegin(); p2rit!=power2.rend(); ++p2rit)
         {
             *p2rit = *p2rit * 2;
         }
         unsigned short int quotient = 0;
-        for(std::vector<bool>::reverse_iterator p2rit=power2.rbegin(); p2rit!=std::prev(power2.rend()); ++p2rit)
+        for(std::vector<unsigned short int>::reverse_iterator p2rit=power2.rbegin(); p2rit!=power2.rend(); ++p2rit)
         {
-            *p2rit = *p2rit + ;
-            quotient =
+            *p2rit = *p2rit + quotient;
+            quotient = *p2rit / base;
+            *p2rit = *p2rit % base;
+        }
+        // add elements to the left in power2 while quotient != 0
+        while(quotient != 0)
+        {
+            power2.insert(power2.begin(), quotient%base);
+            quotient = quotient / base;
+        }
+
+        // now we have the correct power of 2 corresponding to the rank we're at
+        // if we have a 1 here we're gonna add that power of 2 to our result
+
+        if(*rit)
+        {
+            if(result.size()<power2.size())
+            {
+                result.insert(result.begin(), power2.size()-result.size(), 0);
+            }
+
+            std::vector<unsigned short int>::reverse_iterator resultRit = result.rbegin();
+            for(std::vector<unsigned short int>::reverse_iterator p2rit = power2.rbegin(); p2rit != power2.rend(); ++p2rit)
+            {
+                *resultRit = *resultRit + *p2rit;
+                ++resultRit;
+            }
+
+            unsigned short int quotient = 0;
+            for(std::vector<unsigned short int>::reverse_iterator resultRit=result.rbegin(); resultRit!=result.rend(); ++resultRit)
+            {
+                *resultRit = *resultRit + quotient;
+                quotient = *resultRit / base;
+                *resultRit = *resultRit % base;
+            }
+            // add elements to the left in result while quotient != 0
+            while(quotient != 0)
+            {
+                result.insert(result.begin(), quotient%base);
+                quotient = quotient / base;
+            }
         }
     }
+
+    // ok, now last thing we need to do is convert our result to a string
+
+    std::string numberRepresentation("");
+    for(auto value : result)
+    {
+        numberRepresentation += (value < 10 ? '0'+value : 'A'+value-10);
+    }
+
+    return numberRepresentation;
 }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)
