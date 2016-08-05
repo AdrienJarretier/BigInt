@@ -146,6 +146,10 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
 
         while(i>0)
         {
+            // BIG MISTAKE HERE
+            // not comparing right digits should be something like size -i
+            // because leading zeros
+            // CORRECT THIS
             // if at one rank digits are different, then we have a strict lesser than.
             if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
             {
@@ -210,6 +214,45 @@ bool operator>(const BigInt& operand1, const BigInt& operand2)
     return false;
 }
 
+bool operator==(const BigInt& operand1, const BigInt& operand2)
+{
+    // we virtually eliminate non significant leading zeros
+    unsigned int i=0;
+
+    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    {
+        i++;
+    }
+
+    // if all digits are set to 0 then at this point rank = 0;
+    unsigned int op1DigitRank = operand1.currentValue.size()-i;
+
+
+    i=0;
+
+    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
+    {
+        i++;
+    }
+
+    // same as before here
+    unsigned int op2DigitRank = operand2.currentValue.size()-i;
+
+    if(op1DigitRank==op2DigitRank)
+    {
+        while(i>0)
+        {
+            --i;
+            if(operand1.currentValue[i]!=operand2.currentValue[i])
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
     BigInt result, termToAdd;
@@ -264,4 +307,20 @@ BigInt operator*(const BigInt& factor1, const BigInt& factor2)
 
     return result;
 }
+
+BigInt BigInt::pow(const BigInt& exponent) const
+{
+    BigInt result("1");
+
+//    std::cout << "exp : " << exponent << std::endl;
+
+    for(BigInt e("0"); e<exponent; e+=BigInt("1"))
+    {
+//        std::cout << "e : " << e << std::endl;
+        result = result * (*this);
+    }
+
+    return result;
+}
+
 

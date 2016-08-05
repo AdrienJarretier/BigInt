@@ -1,6 +1,8 @@
 #ifndef BIGINT_HPP
 #define BIGINT_HPP
 
+#include <iostream>
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -38,8 +40,11 @@ public:
 
     friend bool operator<(const BigInt& operand1, const BigInt& operand2);
     friend bool operator>(const BigInt& operand1, const BigInt& operand2);
+    friend bool operator==(const BigInt& operand1, const BigInt& operand2);
     friend BigInt operator+(const BigInt& term1, const BigInt& term2);
     friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
+
+    BigInt pow(const BigInt& exponent) const;
 
 };
 
