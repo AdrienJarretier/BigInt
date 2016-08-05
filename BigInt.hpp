@@ -16,6 +16,8 @@ private:
 
 public:
 
+    static void test_increment();
+
     /** \brief Construct a BigInt from string representing the integer in binary
      *
      * \param val integer in base 2, negative if starts with '1', positive if starts with '0'
@@ -41,10 +43,20 @@ public:
     friend bool operator<(const BigInt& operand1, const BigInt& operand2);
     friend bool operator>(const BigInt& operand1, const BigInt& operand2);
     friend bool operator==(const BigInt& operand1, const BigInt& operand2);
+
+    BigInt& operator ++();
+    BigInt  operator ++(int);
     friend BigInt operator+(const BigInt& term1, const BigInt& term2);
+
     friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
 
     BigInt pow(const BigInt& exponent) const;
+
+    /**
+     * \return absolute value of our number
+     *
+     */
+    BigInt abs() const;
 
 };
 

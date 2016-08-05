@@ -36,17 +36,27 @@ BigInt& BigInt::operator+=(const BigInt& term)
 
 std::string BigInt::toBase(unsigned short int base)
 {
+    BigInt valueCopy(*this);
+
+    bool negative = false;
+    if(valueCopy.currentValue[0]) // if it's negative we're gonna save it's negative and get the two's complement
+    {
+        negative = true;
+        valueCopy.currentValue.flip();
+        valueCopy++;
+    }
+
     std::vector<unsigned short int> power2 = {1};
 
     std::vector<unsigned short int> result = {0};
 
-    if(*currentValue.rbegin())
+    if( *(valueCopy.currentValue.rbegin()) )
     {
         result[0]=1;
     }
 
     // we handle the least significant bit before the loop so we start the loop at rbegin + 1
-    for(std::vector<bool>::reverse_iterator rit=std::next(currentValue.rbegin()); rit!=currentValue.rend(); ++rit)
+    for(std::vector<bool>::reverse_iterator rit=std::next(valueCopy.currentValue.rbegin()); rit!=valueCopy.currentValue.rend(); ++rit)
     {
         // multiply each element of power2 by 2 (using modulus to stay in the given base)
         for(std::vector<unsigned short int>::reverse_iterator p2rit=power2.rbegin(); p2rit!=power2.rend(); ++p2rit)
@@ -263,6 +273,55 @@ bool operator==(const BigInt& operand1, const BigInt& operand2)
     return true;
 }
 
+BigInt& BigInt::operator ++()
+{
+    std::vector<bool>::reverse_iterator rit=currentValue.rbegin();
+
+    while(rit!=currentValue.rend() && *rit)
+    {
+        *rit = !*rit;
+        rit++;
+    }
+
+    if(rit!=currentValue.rend())
+    {
+        *rit = !*rit;
+    }
+
+    // if we're just on the first digit aka (rend-1),
+    // it means the msb was 0 so we need to insert a 0
+    if(rit == std::prev(currentValue.rend()))
+    {
+        currentValue.insert(currentValue.begin(), 0);
+    }
+
+    return *this;
+}
+
+BigInt  BigInt::operator ++(int)
+{
+
+}
+
+void BigInt::test_increment()
+{
+    BigInt A("110"); // 6
+    BigInt B("010"); // 2
+
+    BigInt C("011"); // 2
+    BigInt D("11"); // 2
+
+    std::cout << "A : " << A << std::endl;
+    std::cout << "B : " << B << std::endl;
+    std::cout << "C : " << C << std::endl;
+    std::cout << "D : " << D << std::endl << std::endl;
+
+    std::cout << "++A -> " << ++A << std::endl;
+    std::cout << "++B -> " << ++B << std::endl;
+    std::cout << "++C -> " << ++C << std::endl;
+    std::cout << "++D -> " << ++D << std::endl;
+}
+
 BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
     BigInt result, termToAdd;
@@ -332,5 +391,4 @@ BigInt BigInt::pow(const BigInt& exponent) const
 
     return result;
 }
-
 
