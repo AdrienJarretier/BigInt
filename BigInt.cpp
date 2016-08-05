@@ -300,7 +300,11 @@ BigInt& BigInt::operator ++()
 
 BigInt  BigInt::operator ++(int)
 {
+    BigInt this_copy(*this);
 
+    ++(*this);
+
+    return this_copy;
 }
 
 void BigInt::test_increment()
@@ -319,7 +323,17 @@ void BigInt::test_increment()
     std::cout << "++A -> " << ++A << std::endl;
     std::cout << "++B -> " << ++B << std::endl;
     std::cout << "++C -> " << ++C << std::endl;
-    std::cout << "++D -> " << ++D << std::endl;
+    std::cout << "++D -> " << ++D << std::endl << std::endl;
+
+    std::cout << "A++ -> " << A++ << std::endl;
+    std::cout << "B++ -> " << B++ << std::endl;
+    std::cout << "C++ -> " << C++ << std::endl;
+    std::cout << "D++ -> " << D++ << std::endl << std::endl;
+
+    std::cout << "A : " << A << std::endl;
+    std::cout << "B : " << B << std::endl;
+    std::cout << "C : " << C << std::endl;
+    std::cout << "D : " << D << std::endl << std::endl;
 }
 
 BigInt operator+(const BigInt& term1, const BigInt& term2)
