@@ -3,10 +3,14 @@
 BigInt::BigInt(std::string val)
 {
     unsigned int i=0;
+    // count extra leading zeros
     while(i+1<val.size() && val[i]=='0' && val[i+1]=='0')
     {
         ++i;
     }
+
+    // start the copy ignoring the extra leading zeros
+    // e.g :0001110 => 01110
     while(i<val.size())
     {
         currentValue.push_back(val[i]=='1');

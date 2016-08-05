@@ -13,7 +13,7 @@ int main()
     BigInt D("10"); // 2
 
     BigInt E("01011011"); // 1 + 2 + 8 + 16 + 64 = 91
-    BigInt F("001110"); // 2 + 4 + 8 + 64 + 128 = 206
+    BigInt F("0001110"); // 2 + 4 + 8 + 64 + 128 = 206
 
     const unsigned short int BASE = 10;
 
