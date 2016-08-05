@@ -2,9 +2,15 @@
 
 BigInt::BigInt(std::string val)
 {
-    for(auto c : val)
+    unsigned int i=0;
+    while(i+1<val.size() && val[i]=='0' && val[i+1]=='0')
     {
-        currentValue.push_back(c=='1');
+        ++i;
+    }
+    while(i<val.size())
+    {
+        currentValue.push_back(val[i]=='1');
+        ++i;
     }
 }
 

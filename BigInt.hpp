@@ -16,11 +16,11 @@ private:
 
 public:
 
-    /**
-     * Construct a BigInt from string representing the integer in binary
+    /** \brief Construct a BigInt from string representing the integer in binary
      *
-     * @param val integer in base 2
-    **/
+     * \param val integer in base 2, negative if starts with '1', positive if starts with '0'
+     *
+     */
     BigInt(std::string val="0");
 
     BigInt(const BigInt& other);
