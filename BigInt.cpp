@@ -43,7 +43,7 @@ std::string BigInt::toBase(unsigned short int base)
     {
         negative = true;
         valueCopy.currentValue.flip();
-        valueCopy++;
+        ++valueCopy;
     }
 
     std::vector<unsigned short int> power2 = {1};
@@ -112,13 +112,34 @@ std::string BigInt::toBase(unsigned short int base)
 
     // ok, now last thing we need to do is convert our result to a string
 
-    std::string numberRepresentation("");
+    std::string numberRepresentation((negative ? "-" : ""));
     for(auto value : result)
     {
         numberRepresentation += (value < 10 ? '0'+value : 'A'+value-10);
     }
 
     return numberRepresentation;
+}
+
+void BigInt::test_toBase()
+{
+    const unsigned int BASE = 16;
+
+    BigInt A("1101"); // - 0011 = - 3
+    BigInt B("0111"); // 7
+    BigInt C("0100"); // 4
+    BigInt D("0110"); // 6
+    BigInt E("1010"); // - 0110 = - 6
+    BigInt F("1111"); // - 1
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl;
+    std::cout << "F : " << F << " : " << F.toBase(BASE) << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)

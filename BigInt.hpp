@@ -17,6 +17,7 @@ private:
 public:
 
     static void test_increment();
+    static void test_toBase();
 
     /** \brief Construct a BigInt from string representing the integer in binary
      *
