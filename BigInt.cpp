@@ -123,13 +123,13 @@ std::string BigInt::toBase(unsigned short int base)
 
 void BigInt::test_toBase()
 {
-    const unsigned int BASE = 16;
+    const unsigned int BASE = 10;
 
-    BigInt A("1101"); // - 0011 = - 3
-    BigInt B("0111"); // 7
-    BigInt C("0100"); // 4
-    BigInt D("0110"); // 6
-    BigInt E("1010"); // - 0110 = - 6
+    BigInt A("1000"); // - 8
+    BigInt B("01000"); // 8
+    BigInt C("111"); // - 1
+    BigInt D("1"); // - 1
+    BigInt E("11"); // = - 1
     BigInt F("1111"); // - 1
 
     std::cout << "BASE " << BASE << std::endl << std::endl;
@@ -160,32 +160,32 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
         return operand1.currentValue[0];
     }
 
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-    // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
-    if(op1DigitRank != op2DigitRank)
-    {
-        return op1DigitRank < op2DigitRank;
-    }
-    else // if ranks are the same, we have to compare each digits one to one
-    {
-        i = op1DigitRank;
-
-        while(i>0)
-        {
-            // BIG MISTAKE HERE
-            // not comparing right digits should be something like size -i
-            // because leading zeros
-            // CORRECT THIS
-            // if at one rank digits are different, then we have a strict lesser than.
-            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
-            {
-                return !operand1.currentValue[i-1];
-            }
-
-            i--;
-        }
-    }
+//    unsigned int op1DigitRank = operand1.currentValue.size()-i;
+//
+//    // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
+//    if(op1DigitRank != op2DigitRank)
+//    {
+//        return op1DigitRank < op2DigitRank;
+//    }
+//    else // if ranks are the same, we have to compare each digits one to one
+//    {
+//        i = op1DigitRank;
+//
+//        while(i>0)
+//        {
+//            // BIG MISTAKE HERE
+//            // not comparing right digits should be something like size -i
+//            // because leading zeros
+//            // CORRECT THIS
+//            // if at one rank digits are different, then we have a strict lesser than.
+//            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
+//            {
+//                return !operand1.currentValue[i-1];
+//            }
+//
+//            i--;
+//        }
+//    }
 
     // at this point we have equality so we can return a false
     return false;
