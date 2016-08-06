@@ -153,28 +153,14 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 
 bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
-    unsigned int i=0;
+    //first, test for msb
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    if(operand1.currentValue[0] != operand1.currentValue[1])
     {
-        i++;
+        return operand1.currentValue[0];
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
     unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
-    {
-        i++;
-    }
-
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
 
     // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
     if(op1DigitRank != op2DigitRank)
