@@ -125,8 +125,8 @@ void BigInt::test_toBase()
 {
     const unsigned int BASE = 10;
 
-    BigInt A("1000"); // - 8
-    BigInt B("01000"); // 8
+    BigInt A("11111000"); // - 8
+    BigInt B("00001000"); // 8
     BigInt C("111"); // - 1
     BigInt D("1"); // - 1
     BigInt E("11"); // = - 1
@@ -155,39 +155,34 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
     //first, test for msb
 
-    if(operand1.currentValue[0] != operand1.currentValue[1])
+    const std::vector<bool>& cv1=operand1.currentValue;
+    const std::vector<bool>& cv2=operand2.currentValue;
+
+    if(cv1[0] != cv2[1])
     {
-        return operand1.currentValue[0];
+        return cv1[0];
     }
 
-//    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-//
-//    // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
-//    if(op1DigitRank != op2DigitRank)
-//    {
-//        return op1DigitRank < op2DigitRank;
-//    }
-//    else // if ranks are the same, we have to compare each digits one to one
-//    {
-//        i = op1DigitRank;
-//
-//        while(i>0)
-//        {
-//            // BIG MISTAKE HERE
-//            // not comparing right digits should be something like size -i
-//            // because leading zeros
-//            // CORRECT THIS
-//            // if at one rank digits are different, then we have a strict lesser than.
-//            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
-//            {
-//                return !operand1.currentValue[i-1];
-//            }
-//
-//            i--;
-//        }
-//    }
+    unsigned int minSize;
 
-    // at this point we have equality so we can return a false
+    if(cv1.size() < cv2.size())
+    {
+        minSize = cv1.size();
+    }
+    else
+    {
+        minSize = cv2.size();
+    }
+
+    for(auto rit = cv1.crbegin(), rit2 = cv2.crbegin(); minSize > 0; ++rit, ++rit2)
+    {
+        if(*rit != *rit2)
+        {
+            return *rit;
+        }
+    }
+
+//     at this point we have equality so we can return a false
     return false;
 }
 
