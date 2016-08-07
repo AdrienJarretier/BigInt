@@ -3,13 +3,13 @@
 BigInt::BigInt(std::string val)
 {
     unsigned int i=0;
-    // count extra leading zeros
-    while(i+1<val.size() && val[i]=='0' && val[i+1]=='0')
+    // count extra leading zeros or ones for negative
+    while(i+1<val.size() && ((val[i]=='0' && val[i+1]=='0') || (val[i]=='1' && val[i+1]=='1')))
     {
         ++i;
     }
 
-    // start the copy ignoring the extra leading zeros
+    // start the copy ignoring the extra leading zeros or ones
     // e.g :0001110 => 01110
     while(i<val.size())
     {
@@ -127,10 +127,10 @@ void BigInt::test_toBase()
 
     BigInt A("11111000"); // - 8
     BigInt B("00001000"); // 8
-    BigInt C("111"); // - 1
-    BigInt D("1"); // - 1
-    BigInt E("11"); // = - 1
-    BigInt F("1111"); // - 1
+    BigInt C("011"); // 3
+    BigInt D("01"); // 1
+    BigInt E("11"); // - 1
+    BigInt F("1011"); // - 5
 
     std::cout << "BASE " << BASE << std::endl << std::endl;
 
