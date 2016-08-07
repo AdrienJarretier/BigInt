@@ -215,6 +215,29 @@ bool operator>(const BigInt& operand1, const BigInt& operand2)
     return false;
 }
 
+void BigInt::test_comparisons()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("11"); // - 1
+    BigInt C("1011"); // - 5
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A > B : " << (A>B) << " : " << (B<A) << std::endl;
+    std::cout << "A > C : " << (A>C) << " : " << (C<A) << std::endl;
+    std::cout << "B > C : " << (B>C) << " : " << (C<B) << std::endl << std::endl;
+
+    std::cout << "A < B : " << (A<B) << " : " << (B>A) << std::endl;
+    std::cout << "A < C : " << (A<C) << " : " << (C>A) << std::endl;
+    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl;
+}
+
 bool operator==(const BigInt& operand1, const BigInt& operand2)
 {
     // we virtually eliminate non significant leading zeros

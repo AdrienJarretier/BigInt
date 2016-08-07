@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-    BigInt::test_toBase();
+    BigInt::test_comparisons();
 
     return 0;
 }
