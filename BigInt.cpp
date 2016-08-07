@@ -222,12 +222,16 @@ void BigInt::test_comparisons()
     BigInt A("00001000"); // 8
     BigInt B("11"); // - 1
     BigInt C("1011"); // - 5
+    BigInt D("0101"); // 5
+    BigInt E("01000"); // 8
 
     std::cout << "BASE " << BASE << std::endl << std::endl;
 
     std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
     std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
-    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
 
     std::cout << "A > B : " << (A>B) << " : " << (B<A) << std::endl;
     std::cout << "A > C : " << (A>C) << " : " << (C<A) << std::endl;
@@ -235,46 +239,30 @@ void BigInt::test_comparisons()
 
     std::cout << "A < B : " << (A<B) << " : " << (B>A) << std::endl;
     std::cout << "A < C : " << (A<C) << " : " << (C>A) << std::endl;
-    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl;
+    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl << std::endl;
+
+    std::cout << "D == C : " << (D == C) << " : " << (C == D) << std::endl;
+    std::cout << "A == E : " << (A == E) << " : " << (E == A) << std::endl << std::endl;
 }
 
 bool operator==(const BigInt& operand1, const BigInt& operand2)
 {
-    // we virtually eliminate non significant leading zeros
-    unsigned int i=0;
+    BigInt op1 = operand1;
+    BigInt op2 = operand2;
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    std::vector<bool> cv1=op1.currentValue; //cv stands for currentValue
+    std::vector<bool> cv2=op2.currentValue;
+
+    if(cv1.size() < cv2.size())
     {
-        i++;
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv1[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv2[0]);
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
-    {
-        i++;
-    }
-
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
-    if(op1DigitRank==op2DigitRank)
-    {
-        while(i>0)
-        {
-            --i;
-            if(operand1.currentValue[i]!=operand2.currentValue[i])
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return !(op1 < op2 || op1 > op2);
 }
 
 BigInt& BigInt::operator ++()
