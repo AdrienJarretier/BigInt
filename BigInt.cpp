@@ -153,32 +153,29 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 
 bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
+    std::vector<bool> cv1=operand1.currentValue; //cv stands for currentValue
+    std::vector<bool> cv2=operand2.currentValue;
+
     //first, test for msb
-
-    const std::vector<bool>& cv1=operand1.currentValue;
-    const std::vector<bool>& cv2=operand2.currentValue;
-
-    if(cv1[0] != cv2[1])
+    if(cv1[0] != cv2[0])
     {
         return cv1[0];
     }
 
-    unsigned int minSize;
-
     if(cv1.size() < cv2.size())
     {
-        minSize = cv1.size();
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv2[0]);
     }
-    else
+    else if(cv1.size() > cv2.size())
     {
-        minSize = cv2.size();
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv1[0]);
     }
 
-    for(auto rit = cv1.crbegin(), rit2 = cv2.crbegin(); minSize > 0; ++rit, ++rit2)
+    for(unsigned int i=1; i<cv1.size(); i++)
     {
-        if(*rit != *rit2)
+        if(cv1[i] != cv2[i])
         {
-            return *rit;
+            return !cv1[i];
         }
     }
 
@@ -188,51 +185,33 @@ bool operator<(const BigInt& operand1, const BigInt& operand2)
 
 bool operator>(const BigInt& operand1, const BigInt& operand2)
 {
-    unsigned int i=0;
+    std::vector<bool> cv1=operand1.currentValue; //cv stands for currentValue
+    std::vector<bool> cv2=operand2.currentValue;
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    //first, test for msb
+    if(cv1[0] != cv2[0])
     {
-        i++;
+        return !cv1[0];
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
+    if(cv1.size() < cv2.size())
     {
-        i++;
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv2[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv1[0]);
     }
 
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
-
-    // if ranks are different, it means the greatest of the 2 operands is the one that have a '1' at the highest rank
-    if(op1DigitRank != op2DigitRank)
+    for(unsigned int i=1; i<cv1.size(); i++)
     {
-        return op1DigitRank > op2DigitRank;
-    }
-    else // if ranks are the same, we have to compare each digits one to one
-    {
-        i = op1DigitRank;
-
-        while(i>0)
+        if(cv1[i] != cv2[i])
         {
-            // if at one rank digits are different, then we have a strict greater than.
-            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
-            {
-                return operand1.currentValue[i-1];
-            }
-
-            i--;
+            return cv1[i];
         }
     }
 
-    // at this point we have equality so we can return a false
+//     at this point we have equality so we can return a false
     return false;
 }
 
