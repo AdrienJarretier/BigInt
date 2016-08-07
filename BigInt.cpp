@@ -250,8 +250,8 @@ bool operator==(const BigInt& operand1, const BigInt& operand2)
     BigInt op1 = operand1;
     BigInt op2 = operand2;
 
-    std::vector<bool> cv1=op1.currentValue; //cv stands for currentValue
-    std::vector<bool> cv2=op2.currentValue;
+    std::vector<bool>& cv1=op1.currentValue; //cv stands for currentValue
+    std::vector<bool>& cv2=op2.currentValue;
 
     if(cv1.size() < cv2.size())
     {
@@ -330,41 +330,50 @@ void BigInt::test_increment()
 
 BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
-    BigInt result, termToAdd;
+    BigInt t1 = term1;
+    BigInt t2 = term2;
 
-    if(term1 > term2)
-    {
-        result = term1;
-        termToAdd = term2;
-    }
-    else
-    {
-        result = term2;
-        termToAdd = term1;
-    }
+    std::vector<bool>& cv1=t1.currentValue; //cv stands for currentValue
+    std::vector<bool>& cv2=t2.currentValue;
 
-    if(result.currentValue[0])
+    if(cv1.size() < cv2.size())
     {
-        result.currentValue.insert(result.currentValue.begin(), 0);
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv1[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv2[0]);
     }
 
-    bool carry = false, nextCarry=false;
-    std::vector<bool>::reverse_iterator resultRit = result.currentValue.rbegin();
-    for(std::vector<bool>::reverse_iterator termToAddRit = termToAdd.currentValue.rbegin(); termToAddRit != termToAdd.currentValue.rend(); ++termToAddRit)
-    {
-        carry = nextCarry;
-        nextCarry = (*resultRit && *termToAddRit) || (carry && (*resultRit || *termToAddRit));
-        *resultRit = (!carry && (*resultRit != *termToAddRit)) || (carry && (*resultRit == *termToAddRit));
-        ++resultRit;
-    }
-    while(nextCarry)
-    {
-        nextCarry = *resultRit;
-        *resultRit = !*resultRit;
-        ++resultRit;
-    }
 
-    return result;
+
+    return t1;
+}
+
+void BigInt::test_addition()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("10110"); // - 10
+    BigInt C("10011"); // - 13
+    BigInt D("01110"); // 14
+    BigInt E("01000"); // 8
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A + B : " << (A+B) << " : " << (B+A) << " : " << (B + A).toBase(BASE) << std::endl;
+    std::cout << "A + C : " << (A+C) << " : " << (C+A) << " : " << (C + A).toBase(BASE) << std::endl;
+    std::cout << "B + C : " << (B+C) << " : " << (C+B) << " : " << (C + B).toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "D + C : " << (D + C) << " : " << (C + D) << " : " << (C + D).toBase(BASE) << std::endl;
+    std::cout << "A + E : " << (A + E) << " : " << (E + A) << " : " << (E + A).toBase(BASE) << std::endl << std::endl;
 }
 
 BigInt operator*(const BigInt& factor1, const BigInt& factor2)

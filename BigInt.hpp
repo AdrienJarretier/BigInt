@@ -19,6 +19,7 @@ public:
     static void test_increment();
     static void test_toBase();
     static void test_comparisons();
+    static void test_addition();
 
     /** \brief Construct a BigInt from string representing the integer in binary
      *
