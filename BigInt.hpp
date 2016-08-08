@@ -41,7 +41,7 @@ public:
     BigInt& operator+=(const BigInt& term);
 
     /**
-     * Return a representation of the current held number in the requested base
+     * Returns a representation of the current held number in the requested base
      *
      * @param base The requested base
      *
