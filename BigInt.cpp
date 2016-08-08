@@ -3,13 +3,13 @@
 BigInt::BigInt(std::string val)
 {
     unsigned int i=0;
-    // count extra leading zeros
-    while(i+1<val.size() && val[i]=='0' && val[i+1]=='0')
+    // count extra leading zeros or ones for negative
+    while(i+1<val.size() && ((val[i]=='0' && val[i+1]=='0') || (val[i]=='1' && val[i+1]=='1')))
     {
         ++i;
     }
 
-    // start the copy ignoring the extra leading zeros
+    // start the copy ignoring the extra leading zeros or ones
     // e.g :0001110 => 01110
     while(i<val.size())
     {
@@ -43,7 +43,7 @@ std::string BigInt::toBase(unsigned short int base)
     {
         negative = true;
         valueCopy.currentValue.flip();
-        valueCopy++;
+        ++valueCopy;
     }
 
     std::vector<unsigned short int> power2 = {1};
@@ -112,13 +112,34 @@ std::string BigInt::toBase(unsigned short int base)
 
     // ok, now last thing we need to do is convert our result to a string
 
-    std::string numberRepresentation("");
+    std::string numberRepresentation((negative ? "-" : ""));
     for(auto value : result)
     {
         numberRepresentation += (value < 10 ? '0'+value : 'A'+value-10);
     }
 
     return numberRepresentation;
+}
+
+void BigInt::test_toBase()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("11111000"); // - 8
+    BigInt B("00001000"); // 8
+    BigInt C("011"); // 3
+    BigInt D("01"); // 1
+    BigInt E("11"); // - 1
+    BigInt F("1011"); // - 5
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl;
+    std::cout << "F : " << F << " : " << F.toBase(BASE) << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)
@@ -132,145 +153,116 @@ std::ostream& operator<<(std::ostream& os, const BigInt& bi)
 
 bool operator<(const BigInt& operand1, const BigInt& operand2)
 {
-    unsigned int i=0;
+    std::vector<bool> cv1=operand1.currentValue; //cv stands for currentValue
+    std::vector<bool> cv2=operand2.currentValue;
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    //first, test for msb
+    if(cv1[0] != cv2[0])
     {
-        i++;
+        return cv1[0];
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
+    if(cv1.size() < cv2.size())
     {
-        i++;
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv2[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv1[0]);
     }
 
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
-
-    // if ranks are different, it means the lowest of the 2 operands is the one that have a '1' at the lowest rank
-    if(op1DigitRank != op2DigitRank)
+    for(unsigned int i=1; i<cv1.size(); i++)
     {
-        return op1DigitRank < op2DigitRank;
-    }
-    else // if ranks are the same, we have to compare each digits one to one
-    {
-        i = op1DigitRank;
-
-        while(i>0)
+        if(cv1[i] != cv2[i])
         {
-            // BIG MISTAKE HERE
-            // not comparing right digits should be something like size -i
-            // because leading zeros
-            // CORRECT THIS
-            // if at one rank digits are different, then we have a strict lesser than.
-            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
-            {
-                return !operand1.currentValue[i-1];
-            }
-
-            i--;
+            return !cv1[i];
         }
     }
 
-    // at this point we have equality so we can return a false
+//     at this point we have equality so we can return a false
     return false;
 }
 
 bool operator>(const BigInt& operand1, const BigInt& operand2)
 {
-    unsigned int i=0;
+    std::vector<bool> cv1=operand1.currentValue; //cv stands for currentValue
+    std::vector<bool> cv2=operand2.currentValue;
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    //first, test for msb
+    if(cv1[0] != cv2[0])
     {
-        i++;
+        return !cv1[0];
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
+    if(cv1.size() < cv2.size())
     {
-        i++;
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv2[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv1[0]);
     }
 
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
-
-    // if ranks are different, it means the greatest of the 2 operands is the one that have a '1' at the highest rank
-    if(op1DigitRank != op2DigitRank)
+    for(unsigned int i=1; i<cv1.size(); i++)
     {
-        return op1DigitRank > op2DigitRank;
-    }
-    else // if ranks are the same, we have to compare each digits one to one
-    {
-        i = op1DigitRank;
-
-        while(i>0)
+        if(cv1[i] != cv2[i])
         {
-            // if at one rank digits are different, then we have a strict greater than.
-            if(operand1.currentValue[i-1] != operand2.currentValue[i-1])
-            {
-                return operand1.currentValue[i-1];
-            }
-
-            i--;
+            return cv1[i];
         }
     }
 
-    // at this point we have equality so we can return a false
+//     at this point we have equality so we can return a false
     return false;
+}
+
+void BigInt::test_comparisons()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("11"); // - 1
+    BigInt C("1011"); // - 5
+    BigInt D("0101"); // 5
+    BigInt E("01000"); // 8
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A > B : " << (A>B) << " : " << (B<A) << std::endl;
+    std::cout << "A > C : " << (A>C) << " : " << (C<A) << std::endl;
+    std::cout << "B > C : " << (B>C) << " : " << (C<B) << std::endl << std::endl;
+
+    std::cout << "A < B : " << (A<B) << " : " << (B>A) << std::endl;
+    std::cout << "A < C : " << (A<C) << " : " << (C>A) << std::endl;
+    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl << std::endl;
+
+    std::cout << "D == C : " << (D == C) << " : " << (C == D) << std::endl;
+    std::cout << "A == E : " << (A == E) << " : " << (E == A) << std::endl << std::endl;
 }
 
 bool operator==(const BigInt& operand1, const BigInt& operand2)
 {
-    // we virtually eliminate non significant leading zeros
-    unsigned int i=0;
+    BigInt op1 = operand1;
+    BigInt op2 = operand2;
 
-    while(i<operand1.currentValue.size() && !operand1.currentValue[i])
+    std::vector<bool>& cv1=op1.currentValue; //cv stands for currentValue
+    std::vector<bool>& cv2=op2.currentValue;
+
+    if(cv1.size() < cv2.size())
     {
-        i++;
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv1[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv2[0]);
     }
 
-    // if all digits are set to 0 then at this point rank = 0;
-    unsigned int op1DigitRank = operand1.currentValue.size()-i;
-
-
-    i=0;
-
-    while(i<operand2.currentValue.size() && operand2.currentValue[i]!=1)
-    {
-        i++;
-    }
-
-    // same as before here
-    unsigned int op2DigitRank = operand2.currentValue.size()-i;
-
-    if(op1DigitRank==op2DigitRank)
-    {
-        while(i>0)
-        {
-            --i;
-            if(operand1.currentValue[i]!=operand2.currentValue[i])
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return !(op1 < op2 || op1 > op2);
 }
 
 BigInt& BigInt::operator ++()
@@ -338,41 +330,70 @@ void BigInt::test_increment()
 
 BigInt operator+(const BigInt& term1, const BigInt& term2)
 {
-    BigInt result, termToAdd;
+    BigInt t1 = term1;
+    BigInt t2 = term2;
 
-    if(term1 > term2)
-    {
-        result = term1;
-        termToAdd = term2;
-    }
-    else
-    {
-        result = term2;
-        termToAdd = term1;
-    }
+    std::vector<bool>& cv1=t1.currentValue; //cv stands for currentValue
+    std::vector<bool>& cv2=t2.currentValue;
 
-    if(result.currentValue[0])
+    if(cv1.size() < cv2.size())
     {
-        result.currentValue.insert(result.currentValue.begin(), 0);
+        cv1.insert(cv1.begin(),cv2.size()-cv1.size(),cv1[0]);
+    }
+    else if(cv1.size() > cv2.size())
+    {
+        cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv2[0]);
     }
 
     bool carry = false, nextCarry=false;
-    std::vector<bool>::reverse_iterator resultRit = result.currentValue.rbegin();
-    for(std::vector<bool>::reverse_iterator termToAddRit = termToAdd.currentValue.rbegin(); termToAddRit != termToAdd.currentValue.rend(); ++termToAddRit)
+    for(unsigned int j=1; j<cv1.size()+1; ++j)
     {
+        unsigned int i = cv1.size()-j;
         carry = nextCarry;
-        nextCarry = (*resultRit && *termToAddRit) || (carry && (*resultRit || *termToAddRit));
-        *resultRit = (!carry && (*resultRit != *termToAddRit)) || (carry && (*resultRit == *termToAddRit));
-        ++resultRit;
-    }
-    while(nextCarry)
-    {
-        nextCarry = *resultRit;
-        *resultRit = !*resultRit;
-        ++resultRit;
+        nextCarry = (cv1[i] && cv2[i]) || (carry && (cv1[i] || cv2[i]));
+        cv1[i] = (!carry && (cv1[i] != cv2[i])) || (carry && (cv1[i] == cv2[i]));
     }
 
-    return result;
+    // if numbers are both positives or negatives, there is no overflow, we should insert
+    if(term1.currentValue[0] == term2.currentValue[0])
+    {
+        if(nextCarry)
+        {
+            cv1.insert(cv1.begin(),1);
+        }
+        if( !term1.currentValue[0] )
+        {
+            cv1.insert(cv1.begin(),0);
+        }
+    }
+
+    return t1;
+}
+
+void BigInt::test_addition()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("10110"); // - 10
+    BigInt C("10011"); // - 13
+    BigInt D("01110"); // 14
+    BigInt E("01000"); // 8
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A + B : " << (A+B) << " : " << (B+A) << " : " << (B + A).toBase(BASE) << std::endl;
+    std::cout << "A + C : " << (A+C) << " : " << (C+A) << " : " << (C + A).toBase(BASE) << std::endl;
+    std::cout << "B + C : " << (B+C) << " : " << (C+B) << " : " << (C + B).toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "D + C : " << (D + C) << " : " << (C + D) << " : " << (C + D).toBase(BASE) << std::endl;
+    std::cout << "A + E : " << (A + E) << " : " << (E + A) << " : " << (E + A).toBase(BASE) << std::endl << std::endl;
 }
 
 BigInt operator*(const BigInt& factor1, const BigInt& factor2)
