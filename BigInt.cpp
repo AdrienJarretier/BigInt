@@ -18,6 +18,16 @@ BigInt::BigInt(std::string val)
     }
 }
 
+BigInt::BigInt(long long val)
+{
+    std::bitset<sizeof(long long)*8> binaryVal(val);
+
+    for(unsigned int i=1; i<binaryVal.size()+1; ++i)
+    {
+        currentValue.push_back(binaryVal[binaryVal.size()-i]);
+    }
+}
+
 BigInt::BigInt(const BigInt& other)
 :currentValue(other.currentValue)
 {}
