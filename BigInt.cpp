@@ -380,6 +380,11 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
     return t1;
 }
 
+BigInt operator-(const BigInt& term1, const BigInt& term2)
+{
+    return  term1 + term2.twosComplement();
+}
+
 void BigInt::test_addition()
 {
     const unsigned int BASE = 10;
@@ -430,29 +435,47 @@ BigInt operator*(const BigInt& factor1, const BigInt& factor2)
 
 BigInt BigInt::pow(const BigInt& exponent) const
 {
-    BigInt result("1");
-
-//    std::cout << "exp : " << exponent << std::endl;
-
-    for(BigInt e("0"); e<exponent; e+=BigInt("1"))
+    if(exponent == 0)
     {
-//        std::cout << "e : " << e << std::endl;
-        result = result * (*this);
+        return 1;
     }
+    else if(exponent == 1)
+    {
+        return *this;
+    }
+    else if(*exponent.currentValue.rbegin()) // if exponent is odd
+    {
+        BigInt expCopy = exponent-1;
+        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
+        return (*this)*((*this)*(*this)).pow(expCopy);
+    }
+    else
+    {
+        BigInt expCopy = exponent;
+        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
+        return ((*this)*(*this)).pow(expCopy);
+    }
+}
+
+BigInt BigInt::twosComplement() const
+{
+    BigInt result = *this;
+
+    result.currentValue.flip();
+    ++result;
 
     return result;
 }
 
 BigInt BigInt::abs() const
 {
-    BigInt result = *this;
-
-    if(result.currentValue[0])
+    if(this->currentValue[0])
     {
-        result.currentValue.flip();
-        ++result;
+        return twosComplement();
     }
-
-    return result;
+    else
+    {
+        return *this;
+    }
 }
 

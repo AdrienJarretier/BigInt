@@ -14,6 +14,7 @@ class BigInt
 private:
 
     std::vector<bool> currentValue;
+    BigInt twosComplement() const;
 
 public:
 
@@ -57,6 +58,7 @@ public:
     BigInt& operator ++();
     BigInt  operator ++(int);
     friend BigInt operator+(const BigInt& term1, const BigInt& term2);
+    friend BigInt operator-(const BigInt& term1, const BigInt& term2);
 
     friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
 
