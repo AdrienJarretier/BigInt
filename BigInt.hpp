@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include <bitset>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -27,6 +28,12 @@ public:
      *
      */
     BigInt(std::string val="0");
+
+    /** \brief Construct a BigInt from a long long integer
+     *
+     *
+     */
+    BigInt(long long val);
 
     BigInt(const BigInt& other);
     BigInt& operator=(const BigInt& other);

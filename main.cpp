@@ -6,7 +6,15 @@ using namespace std;
 
 int main()
 {
-    BigInt::test_addition();
+    BigInt sinque(5);
+    BigInt moinsQuatre(-4);
+
+    unsigned int BASE = 10;
+
+    cout << sinque << endl;
+    cout << moinsQuatre << endl;
+
+    cout << sinque.toBase(BASE) << " + " << moinsQuatre.toBase(BASE) << " = " << (sinque+moinsQuatre).toBase(BASE) << endl;
 
     return 0;
 }
