@@ -345,7 +345,27 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
         cv2.insert(cv2.begin(),cv1.size()-cv2.size(),cv2[0]);
     }
 
+    bool carry = false, nextCarry=false;
+    for(unsigned int j=1; j<cv1.size()+1; ++j)
+    {
+        unsigned int i = cv1.size()-j;
+        carry = nextCarry;
+        nextCarry = (cv1[i] && cv2[i]) || (carry && (cv1[i] || cv2[i]));
+        cv1[i] = (!carry && (cv1[i] != cv2[i])) || (carry && (cv1[i] == cv2[i]));
+    }
 
+    // if numbers are both positives or negatives, there is no overflow, we should insert
+    if(term1.currentValue[0] == term2.currentValue[0])
+    {
+        if(nextCarry)
+        {
+            cv1.insert(cv1.begin(),1);
+        }
+        if( !term1.currentValue[0] )
+        {
+            cv1.insert(cv1.begin(),0);
+        }
+    }
 
     return t1;
 }
