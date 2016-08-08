@@ -62,11 +62,11 @@ public:
 
     BigInt pow(const BigInt& exponent) const;
 
-//    /**
-//     * \return absolute value of our number
-//     *
-//     */
-//    BigInt abs() const;
+    /**
+     * \return absolute value of our number
+     *
+     */
+    BigInt abs() const;
 
 };
 

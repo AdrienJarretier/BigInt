@@ -437,3 +437,16 @@ BigInt BigInt::pow(const BigInt& exponent) const
     return result;
 }
 
+BigInt BigInt::abs() const
+{
+    BigInt result = *this;
+
+    if(result[0])
+    {
+        result.currentValue.flip();
+        ++result;
+    }
+
+    return result;
+}
+
