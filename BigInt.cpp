@@ -408,15 +408,21 @@ void BigInt::test_addition()
 
 BigInt operator*(const BigInt& factor1, const BigInt& factor2)
 {
-    BigInt f1(factor1), result;
+    BigInt f1 = factor1.abs(), f2 = factor2.abs(), result;
 
-    for(std::vector<bool>::const_reverse_iterator rit = factor2.currentValue.rbegin(); rit != factor2.currentValue.rend(); ++rit)
+    for(std::vector<bool>::const_reverse_iterator rit = f2.currentValue.rbegin(); rit != f2.currentValue.rend(); ++rit)
     {
         if(*rit)
         {
             result += f1;
         }
         f1.currentValue.push_back(0);
+    }
+
+    if(factor1.currentValue[0] != factor2.currentValue[0])
+    {
+        result.currentValue.flip();
+        ++result;
     }
 
     return result;
@@ -441,7 +447,7 @@ BigInt BigInt::abs() const
 {
     BigInt result = *this;
 
-    if(result[0])
+    if(result.currentValue[0])
     {
         result.currentValue.flip();
         ++result;
