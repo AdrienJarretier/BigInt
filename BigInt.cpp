@@ -32,18 +32,6 @@ BigInt::BigInt(const BigInt& other)
 :currentValue(other.currentValue)
 {}
 
-BigInt& BigInt::operator=(const BigInt& other)
-{
-    currentValue = other.currentValue;
-    return *this;
-}
-
-BigInt& BigInt::operator+=(const BigInt& term)
-{
-    (*this) = (*this)+term;
-    return *this;
-}
-
 std::string BigInt::toBase(unsigned short int base)
 {
     BigInt valueCopy(*this);
@@ -131,6 +119,117 @@ std::string BigInt::toBase(unsigned short int base)
     return numberRepresentation;
 }
 
+BigInt BigInt::pow(const BigInt& exponent) const
+{
+    if(exponent == 0)
+    {
+        return 1;
+    }
+    else if(exponent == 1)
+    {
+        return *this;
+    }
+    else if(*exponent.currentValue.rbegin()) // if exponent is odd
+    {
+        BigInt expCopy = exponent-1;
+        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
+        return (*this)*((*this)*(*this)).pow(expCopy);
+    }
+    else
+    {
+        BigInt expCopy = exponent;
+        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
+        return ((*this)*(*this)).pow(expCopy);
+    }
+}
+
+BigInt BigInt::abs() const
+{
+    if(this->currentValue[0])
+    {
+        return twosComplement();
+    }
+    else
+    {
+        return *this;
+    }
+}
+
+BigInt& BigInt::operator=(const BigInt& other)
+{
+    currentValue = other.currentValue;
+    return *this;
+}
+
+BigInt& BigInt::operator+=(const BigInt& term)
+{
+    (*this) = (*this)+term;
+    return *this;
+}
+
+BigInt& BigInt::operator ++()
+{
+    std::vector<bool>::reverse_iterator rit=currentValue.rbegin();
+
+    while(rit!=currentValue.rend() && *rit)
+    {
+        *rit = !*rit;
+        rit++;
+    }
+
+    if(rit!=currentValue.rend())
+    {
+        *rit = !*rit;
+    }
+
+    // if we're just on the first digit aka (rend-1),
+    // it means the msb was 0 so we need to insert a 0
+    if(rit == std::prev(currentValue.rend()))
+    {
+        currentValue.insert(currentValue.begin(), 0);
+    }
+
+    return *this;
+}
+
+BigInt  BigInt::operator ++(int)
+{
+    BigInt this_copy(*this);
+
+    ++(*this);
+
+    return this_copy;
+}
+
+void BigInt::test_increment()
+{
+    BigInt A("110"); // 6
+    BigInt B("010"); // 2
+
+    BigInt C("011"); // 2
+    BigInt D("11"); // 2
+
+    std::cout << "A : " << A << std::endl;
+    std::cout << "B : " << B << std::endl;
+    std::cout << "C : " << C << std::endl;
+    std::cout << "D : " << D << std::endl << std::endl;
+
+    std::cout << "++A -> " << ++A << std::endl;
+    std::cout << "++B -> " << ++B << std::endl;
+    std::cout << "++C -> " << ++C << std::endl;
+    std::cout << "++D -> " << ++D << std::endl << std::endl;
+
+    std::cout << "A++ -> " << A++ << std::endl;
+    std::cout << "B++ -> " << B++ << std::endl;
+    std::cout << "C++ -> " << C++ << std::endl;
+    std::cout << "D++ -> " << D++ << std::endl << std::endl;
+
+    std::cout << "A : " << A << std::endl;
+    std::cout << "B : " << B << std::endl;
+    std::cout << "C : " << C << std::endl;
+    std::cout << "D : " << D << std::endl << std::endl;
+}
+
 void BigInt::test_toBase()
 {
     const unsigned int BASE = 10;
@@ -150,6 +249,62 @@ void BigInt::test_toBase()
     std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
     std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl;
     std::cout << "F : " << F << " : " << F.toBase(BASE) << std::endl;
+}
+
+void BigInt::test_comparisons()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("11"); // - 1
+    BigInt C("1011"); // - 5
+    BigInt D("0101"); // 5
+    BigInt E("01000"); // 8
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A > B : " << (A>B) << " : " << (B<A) << std::endl;
+    std::cout << "A > C : " << (A>C) << " : " << (C<A) << std::endl;
+    std::cout << "B > C : " << (B>C) << " : " << (C<B) << std::endl << std::endl;
+
+    std::cout << "A < B : " << (A<B) << " : " << (B>A) << std::endl;
+    std::cout << "A < C : " << (A<C) << " : " << (C>A) << std::endl;
+    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl << std::endl;
+
+    std::cout << "D == C : " << (D == C) << " : " << (C == D) << std::endl;
+    std::cout << "A == E : " << (A == E) << " : " << (E == A) << std::endl << std::endl;
+}
+
+void BigInt::test_addition()
+{
+    const unsigned int BASE = 10;
+
+    BigInt A("00001000"); // 8
+    BigInt B("10110"); // - 10
+    BigInt C("10011"); // - 13
+    BigInt D("01110"); // 14
+    BigInt E("01000"); // 8
+
+    std::cout << "BASE " << BASE << std::endl << std::endl;
+
+    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
+    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
+    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
+    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
+    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "A + B : " << (A+B) << " : " << (B+A) << " : " << (B + A).toBase(BASE) << std::endl;
+    std::cout << "A + C : " << (A+C) << " : " << (C+A) << " : " << (C + A).toBase(BASE) << std::endl;
+    std::cout << "B + C : " << (B+C) << " : " << (C+B) << " : " << (C + B).toBase(BASE) << std::endl << std::endl;
+
+    std::cout << "D + C : " << (D + C) << " : " << (C + D) << " : " << (C + D).toBase(BASE) << std::endl;
+    std::cout << "A + E : " << (A + E) << " : " << (E + A) << " : " << (E + A).toBase(BASE) << std::endl << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const BigInt& bi)
@@ -225,36 +380,6 @@ bool operator>(const BigInt& operand1, const BigInt& operand2)
     return false;
 }
 
-void BigInt::test_comparisons()
-{
-    const unsigned int BASE = 10;
-
-    BigInt A("00001000"); // 8
-    BigInt B("11"); // - 1
-    BigInt C("1011"); // - 5
-    BigInt D("0101"); // 5
-    BigInt E("01000"); // 8
-
-    std::cout << "BASE " << BASE << std::endl << std::endl;
-
-    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
-    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
-    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
-    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
-    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
-
-    std::cout << "A > B : " << (A>B) << " : " << (B<A) << std::endl;
-    std::cout << "A > C : " << (A>C) << " : " << (C<A) << std::endl;
-    std::cout << "B > C : " << (B>C) << " : " << (C<B) << std::endl << std::endl;
-
-    std::cout << "A < B : " << (A<B) << " : " << (B>A) << std::endl;
-    std::cout << "A < C : " << (A<C) << " : " << (C>A) << std::endl;
-    std::cout << "B < C : " << (B<C) << " : " << (C>B) << std::endl << std::endl;
-
-    std::cout << "D == C : " << (D == C) << " : " << (C == D) << std::endl;
-    std::cout << "A == E : " << (A == E) << " : " << (E == A) << std::endl << std::endl;
-}
-
 bool operator==(const BigInt& operand1, const BigInt& operand2)
 {
     BigInt op1 = operand1;
@@ -273,69 +398,6 @@ bool operator==(const BigInt& operand1, const BigInt& operand2)
     }
 
     return !(op1 < op2 || op1 > op2);
-}
-
-BigInt& BigInt::operator ++()
-{
-    std::vector<bool>::reverse_iterator rit=currentValue.rbegin();
-
-    while(rit!=currentValue.rend() && *rit)
-    {
-        *rit = !*rit;
-        rit++;
-    }
-
-    if(rit!=currentValue.rend())
-    {
-        *rit = !*rit;
-    }
-
-    // if we're just on the first digit aka (rend-1),
-    // it means the msb was 0 so we need to insert a 0
-    if(rit == std::prev(currentValue.rend()))
-    {
-        currentValue.insert(currentValue.begin(), 0);
-    }
-
-    return *this;
-}
-
-BigInt  BigInt::operator ++(int)
-{
-    BigInt this_copy(*this);
-
-    ++(*this);
-
-    return this_copy;
-}
-
-void BigInt::test_increment()
-{
-    BigInt A("110"); // 6
-    BigInt B("010"); // 2
-
-    BigInt C("011"); // 2
-    BigInt D("11"); // 2
-
-    std::cout << "A : " << A << std::endl;
-    std::cout << "B : " << B << std::endl;
-    std::cout << "C : " << C << std::endl;
-    std::cout << "D : " << D << std::endl << std::endl;
-
-    std::cout << "++A -> " << ++A << std::endl;
-    std::cout << "++B -> " << ++B << std::endl;
-    std::cout << "++C -> " << ++C << std::endl;
-    std::cout << "++D -> " << ++D << std::endl << std::endl;
-
-    std::cout << "A++ -> " << A++ << std::endl;
-    std::cout << "B++ -> " << B++ << std::endl;
-    std::cout << "C++ -> " << C++ << std::endl;
-    std::cout << "D++ -> " << D++ << std::endl << std::endl;
-
-    std::cout << "A : " << A << std::endl;
-    std::cout << "B : " << B << std::endl;
-    std::cout << "C : " << C << std::endl;
-    std::cout << "D : " << D << std::endl << std::endl;
 }
 
 BigInt operator+(const BigInt& term1, const BigInt& term2)
@@ -385,32 +447,6 @@ BigInt operator-(const BigInt& term1, const BigInt& term2)
     return  term1 + term2.twosComplement();
 }
 
-void BigInt::test_addition()
-{
-    const unsigned int BASE = 10;
-
-    BigInt A("00001000"); // 8
-    BigInt B("10110"); // - 10
-    BigInt C("10011"); // - 13
-    BigInt D("01110"); // 14
-    BigInt E("01000"); // 8
-
-    std::cout << "BASE " << BASE << std::endl << std::endl;
-
-    std::cout << "A : " << A << " : " << A.toBase(BASE) << std::endl;
-    std::cout << "B : " << B << " : " << B.toBase(BASE) << std::endl;
-    std::cout << "C : " << C << " : " << C.toBase(BASE) << std::endl;
-    std::cout << "D : " << D << " : " << D.toBase(BASE) << std::endl;
-    std::cout << "E : " << E << " : " << E.toBase(BASE) << std::endl << std::endl;
-
-    std::cout << "A + B : " << (A+B) << " : " << (B+A) << " : " << (B + A).toBase(BASE) << std::endl;
-    std::cout << "A + C : " << (A+C) << " : " << (C+A) << " : " << (C + A).toBase(BASE) << std::endl;
-    std::cout << "B + C : " << (B+C) << " : " << (C+B) << " : " << (C + B).toBase(BASE) << std::endl << std::endl;
-
-    std::cout << "D + C : " << (D + C) << " : " << (C + D) << " : " << (C + D).toBase(BASE) << std::endl;
-    std::cout << "A + E : " << (A + E) << " : " << (E + A) << " : " << (E + A).toBase(BASE) << std::endl << std::endl;
-}
-
 BigInt operator*(const BigInt& factor1, const BigInt& factor2)
 {
     BigInt f1 = factor1.abs(), f2 = factor2.abs(), result;
@@ -433,30 +469,6 @@ BigInt operator*(const BigInt& factor1, const BigInt& factor2)
     return result;
 }
 
-BigInt BigInt::pow(const BigInt& exponent) const
-{
-    if(exponent == 0)
-    {
-        return 1;
-    }
-    else if(exponent == 1)
-    {
-        return *this;
-    }
-    else if(*exponent.currentValue.rbegin()) // if exponent is odd
-    {
-        BigInt expCopy = exponent-1;
-        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
-        return (*this)*((*this)*(*this)).pow(expCopy);
-    }
-    else
-    {
-        BigInt expCopy = exponent;
-        expCopy.currentValue.erase(std::prev(expCopy.currentValue.end()));
-        return ((*this)*(*this)).pow(expCopy);
-    }
-}
-
 BigInt BigInt::twosComplement() const
 {
     BigInt result = *this;
@@ -465,17 +477,5 @@ BigInt BigInt::twosComplement() const
     ++result;
 
     return result;
-}
-
-BigInt BigInt::abs() const
-{
-    if(this->currentValue[0])
-    {
-        return twosComplement();
-    }
-    else
-    {
-        return *this;
-    }
 }
 
