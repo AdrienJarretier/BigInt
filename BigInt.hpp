@@ -18,11 +18,6 @@ private:
 
 public:
 
-    static void test_increment();
-    static void test_toBase();
-    static void test_comparisons();
-    static void test_addition();
-
     /** \brief Constructs a BigInt from string representing the integer in binary
      *
      * \param val Integer in base 2, negative if starts with '1', positive if starts with '0'
@@ -35,9 +30,12 @@ public:
      */
     BigInt(long long val);
 
+    /** \brief Copy constructor
+     *
+     * \param other The BigInt to copy
+     *
+     */
     BigInt(const BigInt& other);
-    BigInt& operator=(const BigInt& other);
-    BigInt& operator+=(const BigInt& term);
 
     /** \brief Returns a representation of the current held number in the requested base
      *
@@ -47,19 +45,13 @@ public:
      */
     std::string toBase(unsigned short int base);
 
-    friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
-
-    friend bool operator<(const BigInt& operand1, const BigInt& operand2);
-    friend bool operator>(const BigInt& operand1, const BigInt& operand2);
-    friend bool operator==(const BigInt& operand1, const BigInt& operand2);
-
-    BigInt& operator ++();
-    BigInt  operator ++(int);
-    friend BigInt operator+(const BigInt& term1, const BigInt& term2);
-    friend BigInt operator-(const BigInt& term1, const BigInt& term2);
-
-    friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
-
+    /** \brief Returns the current integer raised to the power of exponent
+     *
+     * \param exponent Exponent value
+     *
+     * \return The result of raising this to the power of exponent
+     *
+     */
     BigInt pow(const BigInt& exponent) const;
 
     /** \brief Returns the absolute value of our number
@@ -68,6 +60,27 @@ public:
      *
      */
     BigInt abs() const;
+
+    BigInt& operator=(const BigInt& other);
+    BigInt& operator+=(const BigInt& term);
+    BigInt& operator ++();
+    BigInt  operator ++(int);
+
+    static void test_increment();
+    static void test_toBase();
+    static void test_comparisons();
+    static void test_addition();
+
+    friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
+
+    friend bool operator<(const BigInt& operand1, const BigInt& operand2);
+    friend bool operator>(const BigInt& operand1, const BigInt& operand2);
+    friend bool operator==(const BigInt& operand1, const BigInt& operand2);
+
+    friend BigInt operator+(const BigInt& term1, const BigInt& term2);
+    friend BigInt operator-(const BigInt& term1, const BigInt& term2);
+
+    friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
 
 };
 
