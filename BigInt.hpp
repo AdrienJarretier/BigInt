@@ -23,15 +23,14 @@ public:
     static void test_comparisons();
     static void test_addition();
 
-    /** \brief Construct a BigInt from string representing the integer in binary
+    /** \brief Constructs a BigInt from string representing the integer in binary
      *
-     * \param val integer in base 2, negative if starts with '1', positive if starts with '0'
+     * \param val Integer in base 2, negative if starts with '1', positive if starts with '0'
      *
      */
     BigInt(std::string val="0");
 
-    /** \brief Construct a BigInt from a long long integer
-     *
+    /** \brief Constructs a BigInt from a long long integer
      *
      */
     BigInt(long long val);
@@ -40,13 +39,12 @@ public:
     BigInt& operator=(const BigInt& other);
     BigInt& operator+=(const BigInt& term);
 
-    /**
-     * Returns a representation of the current held number in the requested base
+    /** \brief Returns a representation of the current held number in the requested base
      *
-     * @param base The requested base
+     * \param base The requested base
+     * \return The representation of the current value
      *
-     * @return the representation of the current value
-    **/
+     */
     std::string toBase(unsigned short int base);
 
     friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
@@ -64,8 +62,9 @@ public:
 
     BigInt pow(const BigInt& exponent) const;
 
-    /**
-     * \return absolute value of our number
+    /** \brief Returns the absolute value of our number
+     *
+     * \return Absolute value of our number
      *
      */
     BigInt abs() const;
