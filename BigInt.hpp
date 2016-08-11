@@ -1,8 +1,6 @@
 #ifndef BIGINT_HPP
 #define BIGINT_HPP
 
-#include <iostream>
-
 #include <bitset>
 #include <sstream>
 #include <string>
@@ -65,11 +63,6 @@ public:
     BigInt& operator+=(const BigInt& term);
     BigInt& operator ++();
     BigInt  operator ++(int);
-
-    static void test_increment();
-    static void test_toBase();
-    static void test_comparisons();
-    static void test_addition();
 
     friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
 
