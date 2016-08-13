@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+/** \brief The main class, instanciates to use like an integer
+ *
+ */
 class BigInt
 {
 
