@@ -1,6 +1,6 @@
 # BigInt
 
-A c++ implementation of a big (very big) integers library.
+A C++ library for very big integers.
 
 This will allow for handling of arbitrary large integers.
 
