@@ -32,7 +32,7 @@ BigInt::BigInt(const BigInt& other)
 :currentValue(other.currentValue)
 {}
 
-std::string BigInt::toBase(unsigned short int base)
+std::string BigInt::toBase(unsigned short int base) const
 {
     BigInt valueCopy(*this);
 
@@ -111,12 +111,29 @@ std::string BigInt::toBase(unsigned short int base)
     // ok, now last thing we need to do is convert our result to a string
 
     std::string numberRepresentation((negative ? "-" : ""));
-    for(auto value : result)
+    if(base < 95)
     {
-        numberRepresentation += (value < 10 ? '0'+value : 'A'+value-10);
+        for(auto value : result)
+        {
+            numberRepresentation += (value < 10 ? '0'+value : 'A'+value-10);
+        }
+    }
+    else if (base == 95) // need all printable ASCII characters
+    {
+        for(auto value : result)
+        {
+            numberRepresentation += 32+value;
+        }
     }
 
     return numberRepresentation;
+}
+
+std::string BigInt::toASCII() const
+{
+    const unsigned short int BASE = 95; // printable ASCII characters from 32 to 126
+
+    return toBase(BASE);
 }
 
 BigInt BigInt::pow(const BigInt& exponent) const

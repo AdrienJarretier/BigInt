@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+
 /** \brief The main class, instanciates to use like an integer
  *
  */
@@ -44,7 +46,9 @@ public:
      * \return The representation of the current value
      *
      */
-    std::string toBase(unsigned short int base);
+    std::string toBase(unsigned short int base) const;
+
+    std::string toASCII() const;
 
     /** \brief Returns the current integer raised to the power of exponent
      *
