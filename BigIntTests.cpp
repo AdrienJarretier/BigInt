@@ -2,16 +2,16 @@
 
 void BigIntTests::increment()
 {
-    BigInt A("110"); // 6
-    BigInt B("010"); // 2
+    BigInt A("110"); // -2
+    BigInt B("010"); //  2
 
-    BigInt C("011"); // 2
-    BigInt D("11"); // 2
+    BigInt C("011"); //  3
+    BigInt D("11");  // -1
 
-    std::cout << "A : " << A << std::endl;
-    std::cout << "B : " << B << std::endl;
-    std::cout << "C : " << C << std::endl;
-    std::cout << "D : " << D << std::endl << std::endl;
+    std::cout << "A : 0b" << A << " : " << A.toBase(10) << std::endl;
+    std::cout << "B : 0b" << B << " : " << B.toBase(10) << std::endl;
+    std::cout << "C : 0b" << C << " : " << C.toBase(10) << std::endl;
+    std::cout << "D : 0b" << D << " : " << D.toBase(10) << std::endl << std::endl;
 
     std::cout << "++A -> " << ++A << std::endl;
     std::cout << "++B -> " << ++B << std::endl;
