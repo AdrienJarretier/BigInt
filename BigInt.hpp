@@ -1,6 +1,12 @@
 #ifndef BIGINT_HPP
 #define BIGINT_HPP
 
+#ifdef BIGINT_EXPORTS
+#define BIGINT_API __declspec(dllexport)
+#else
+#define BIGINT_API __declspec(dllimport)
+#endif
+
 #include <bitset>
 #include <sstream>
 #include <string>
@@ -11,7 +17,7 @@
 /** \brief The main class, instanciates to use like an integer
  *
  */
-class BigInt
+class BIGINT_API BigInt
 {
 
 private:

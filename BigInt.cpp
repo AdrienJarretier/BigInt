@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "BigInt.hpp"
 
 BigInt::BigInt(std::string val)
