@@ -331,9 +331,9 @@ BigInt operator+(const BigInt& term1, const BigInt& term2)
     }
 
     bool carry = false, nextCarry=false;
-    for(unsigned int j=1; j<cv1.size()+1; ++j)
+    for(size_t j=1; j<cv1.size()+1; ++j)
     {
-        unsigned int i = cv1.size()-j;
+        size_t i = cv1.size()-j;
         carry = nextCarry;
         nextCarry = (cv1[i] && cv2[i]) || (carry && (cv1[i] || cv2[i]));
         cv1[i] = (!carry && (cv1[i] != cv2[i])) || (carry && (cv1[i] == cv2[i]));
