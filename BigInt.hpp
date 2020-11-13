@@ -7,6 +7,8 @@
 #define BIGINT_API __declspec(dllimport)
 #endif
 
+#pragma warning(disable: 4251)
+
 #include <bitset>
 #include <sstream>
 #include <string>
@@ -77,16 +79,16 @@ public:
     BigInt& operator ++();
     BigInt  operator ++(int);
 
-    friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
+    BIGINT_API friend std::ostream& operator<<(std::ostream& os, const BigInt& bi);
 
-    friend bool operator<(const BigInt& operand1, const BigInt& operand2);
-    friend bool operator>(const BigInt& operand1, const BigInt& operand2);
-    friend bool operator==(const BigInt& operand1, const BigInt& operand2);
+    BIGINT_API friend bool operator<(const BigInt& operand1, const BigInt& operand2);
+    BIGINT_API friend bool operator>(const BigInt& operand1, const BigInt& operand2);
+    BIGINT_API friend bool operator==(const BigInt& operand1, const BigInt& operand2);
 
-    friend BigInt operator+(const BigInt& term1, const BigInt& term2);
-    friend BigInt operator-(const BigInt& term1, const BigInt& term2);
+    BIGINT_API friend BigInt operator+(const BigInt& term1, const BigInt& term2);
+    BIGINT_API friend BigInt operator-(const BigInt& term1, const BigInt& term2);
 
-    friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
+    BIGINT_API friend BigInt operator*(const BigInt& factor1, const BigInt& factor2);
 
 };
 
