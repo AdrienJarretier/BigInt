@@ -133,8 +133,8 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y $(TargetPath) $(OutDir)..\dist\$(ConfigurationName)
-xcopy /Y $(TargetDir)$(TargetName).lib $(OutDir)..\dist\$(ConfigurationName)</Command>
+      <Command>xcopy /Y $(TargetPath) $(OutDir)..\dist\$(ConfigurationName)\
+xcopy /Y $(TargetDir)$(TargetName).lib $(OutDir)..\dist\$(ConfigurationName)\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -157,8 +157,8 @@ xcopy /Y $(TargetDir)$(TargetName).lib $(OutDir)..\dist\$(ConfigurationName)</Co
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y $(TargetPath) $(OutDir)..\dist\$(ConfigurationName)
-xcopy /Y $(TargetDir)$(TargetName).lib $(OutDir)..\dist\$(ConfigurationName)</Command>
+      <Command>xcopy /Y $(TargetPath) $(OutDir)..\dist\$(ConfigurationName)\
+xcopy /Y $(TargetDir)$(TargetName).lib $(OutDir)..\dist\$(ConfigurationName)\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
